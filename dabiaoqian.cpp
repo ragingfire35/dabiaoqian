@@ -154,8 +154,8 @@ void dabiaoqian::UploadResponse(QNetworkReply* reply)
 
 	if(200!= statusCodeV){	
 		QString str = QString::number(statusCodeV.toInt());
-		QMessageBox::information(NULL, "打标签响应", "打标签失败,httperr:"+ str, QMessageBox::Yes | QMessageBox::No);
-		return;
+		QMessageBox::information(NULL, "打标签响应", "打标签失败,httperr:"+ str, QMessageBox::Yes);
+		//return;
 	}
 
 	// Or the target URL if it was a redirect:  
@@ -203,9 +203,11 @@ void dabiaoqian::UploadSignatureAndType()
 		this, SLOT(UploadResponse(QNetworkReply*)));
 
 	QString str = domain;
-	QUrl url(str+ QString("dabiaoqian.php"));
-	
-	QNetworkReply* reply = namUpload->post(QNetworkRequest(url), js.toUtf8());
+	QUrl url(str+ QString("dabiaoqian.php?XDEBUG_SESSION_START=PHPSTORM"));
+	QNetworkRequest request= QNetworkRequest(url);
+	request.setUrl(url);
+	request.setHeader(QNetworkRequest::CookieHeader, "XDEBUG_SESSION=PHPSTORM");
+	QNetworkReply* reply = namUpload->post(request, js.toUtf8());
 }
 
 void dabiaoqian::OnClickNameType()
@@ -273,7 +275,7 @@ void dabiaoqian::checkDate() {
 }
 void dabiaoqian::Init()
 {	
-	checkDate();
+	//checkDate();
 
 	InitCombox();
 	ReadSignatue();
